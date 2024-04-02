@@ -1,4 +1,5 @@
 #include <iostream>
+<<<<<<< HEAD
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -91,3 +92,13 @@ int main()
     return 0;
 }
 
+=======
+using namespace std;
+
+int main()
+{
+  cout << "Welcome recipe manager program!" << endl;
+
+  return 0;
+}
+>>>>>>> main
