@@ -47,19 +47,10 @@ void delete_recipe(const string& filename, const string& recipeName) {
 
 int main() 
 {
-    cout << "--------------------Welcome recipe manager feature of agrim!--------------------" << endl;
-    ifstream file("C:\\Users\\Aakash\\Desktop\\C++_files\\recc.csv");
+    ifstream file("<file_path>.csv");
     // Open the output file stream in append mode
-    ofstream tempFile("C:\\Users\\Aakash\\Desktop\\C++_files\\recc.csv", ios::app);
-    cout << "The recipes are:\n";
+    ofstream tempFile("<file_path>.csv", ios::app);
     string rec_name, rec_type, rec_ing, rec_steps;
-    while (getline(file, rec_name, ',') &&
-           getline(file, rec_type, ',') &&
-           getline(file, rec_ing, ',') &&
-           getline(file,rec_steps)) {
-        cout << rec_name << " / " << rec_type << " / " << rec_ing << " / " << rec_steps << endl;
-    }
-    cout << endl;
     char choice;
     cout << "Enter 'a' to add a recipe: ";
     choice = getchar();
@@ -85,7 +76,7 @@ int main()
     cin >> choice;
     if(choice == 'd' || choice == 'D')
     {
-    string filename = "C:\\Users\\Aakash\\Desktop\\C++_files\\recc.csv";
+    string filename = "<file_path>.csv";
     
     string recipeNameToDelete;
     cout << "Enter the name of the recipe you want to delete: ";
@@ -96,19 +87,6 @@ int main()
     }
     file.close();
     tempFile.close();
-    string rec_add_steps;
-    cout << "Final menu is\n======\n";
-    ifstream file3("C:\\Users\\Aakash\\Desktop\\C++_files\\recc.csv");
-    while (getline(file3, rec_name, ',') &&
-           getline(file3, rec_type, ',') &&
-           getline(file3, rec_ing, ',') &&
-           getline(file3, rec_add_steps, '\n')) {
-        cout << rec_name << " / " << rec_type << " / ";
-        cout << rec_ing << " / ";
-        cout << rec_add_steps << endl;
-    }
-    cout << "======";
-    file3.close();
     
     return 0;
 }
