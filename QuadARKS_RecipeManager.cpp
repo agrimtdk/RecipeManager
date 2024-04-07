@@ -93,6 +93,65 @@ void display_recipe_category(const string &file_name) {
     
     file.close();
 }
+
+void ingridientsearch(const string &file_name, const string &ingredient_name)
+{
+    ifstream file(file_name);
+    if (!file.is_open())
+    {
+        cout << "ERROR: File is not open!" << endl;
+        return;
+    }
+    string line;
+    Recipe recipe;
+    int flag = 0;
+    while (getline(file, line))
+    {
+        recipe = add_line_in_vector(line);
+        for (int i = 2; i < recipe.m - 2; ++i)
+        {
+            if (ingredient_name == recipe.recipe[i])
+            {
+                flag = 1;
+                cout << recipe.recipe[0] << endl;
+            }
+        }
+    }
+    if (flag == 0)
+    {
+        cout << "No recipe contain these ingredients." << endl;
+    }
+    file.close();
+}
+
+void categorysearch(const string &file_name, const string &category_name)
+{
+    ifstream file(file_name);
+    if (!file.is_open())
+    {
+        cout << "ERROR: File is not open!" << endl;
+        return;
+    }
+    string line;
+    Recipe recipe;
+    int flag = 0;
+    while (getline(file, line))
+    {
+        recipe = add_line_in_vector(line);
+
+        if (category_name == recipe.recipe[1])
+        {
+            flag = 1;
+            cout << recipe.recipe[0] << endl;
+        }
+    }
+    if (flag == 0)
+    {
+        cout << "No recipe is found of these category." << endl;
+    }
+    file.close();
+}
+
 int main()
 {
     string file_name = "recipe_manager.csv";
