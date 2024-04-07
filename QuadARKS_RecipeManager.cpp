@@ -151,6 +151,75 @@ void categorysearch(const string &file_name, const string &category_name)
     }
     file.close();
 }
+void displayMP()
+{
+    ifstream file("Book.csv");
+    if (!file.is_open())
+    {
+        cout << "ERROR: Unable to open file!" << std::endl;
+        return;
+    }
+
+    string line;
+    getline(file, line); // Read and discard the header line
+
+    cout << "Meal Planner" << std::endl;
+    for (int i = 0; i < days; ++i)
+    {
+        cout << "Day " << i + 1 << " (" << daysOfWeek[i] << "):" << endl;
+        for (int j = 0; j < meals; ++j)
+        {
+            string meal;
+            if (getline(file, meal))
+            {
+                // Adjusting for the format of the CSV file
+                string mealType;
+                if (j == 0)
+                    mealType = "Breakfast";
+                else if (j == 1)
+                    mealType = "Lunch";
+                else
+                    mealType = "Dinner";
+
+                // Assuming the content of the CSV file matches the meal plan format
+                cout << "Enter " << mealType << " for " << daysOfWeek[i] << ": " << meal << endl;
+            }
+            else
+            {
+                cout << "Error reading meal from file." << endl;
+                break;
+            }
+        }
+        cout << endl;
+    }
+    file.close();
+}
+
+void saveToCSV(string mealPlan[days][meals]) {
+    ofstream file("Book.csv");
+    if (file.is_open()) {
+        file << "Day,Meal\n";
+
+        for (int i = 0; i < days; ++i) {
+            for (int j = 0; j < meals; ++j) {
+                string mealType;
+                if (j == 0)
+                    mealType = "Breakfast";
+                else if (j == 1)
+                    mealType = "Lunch";
+                else
+                    mealType = "Dinner";
+
+                file << mealPlan[i][j] << "\n";
+            }
+        }
+
+        file.close();
+        cout << "Meal plan saved" << endl;
+    } else {
+        cout << "Unable to open file." << endl;
+    }
+}
 
 int main()
 {
