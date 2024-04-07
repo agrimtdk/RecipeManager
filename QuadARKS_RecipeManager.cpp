@@ -94,7 +94,7 @@ void display_recipe_category(const string &file_name) {
     file.close();
 }
 
-void ingridientsearch(const string &file_name, const string &ingredient_name)
+void ingredientsearch(const string &file_name, const string &ingredient_name)
 {
     ifstream file(file_name);
     if (!file.is_open())
@@ -195,7 +195,7 @@ int main()
         case 2:
             cout << "Enter ingredient name to search: ";
             getline(cin, ingredient_name);
-            ingridientsearch(file_name, ingredient_name);
+            ingredientsearch(file_name, ingredient_name);
             break;
         case 3:
             cout << "Enter category type to search: ";
