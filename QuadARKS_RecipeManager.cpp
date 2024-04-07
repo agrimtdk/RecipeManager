@@ -34,7 +34,43 @@ Recipe add_line_in_vector(const string &line)
     }
     return recipe;
 }
-
+void diabetes_eatable_checker(const string &file_name, const string &recipe_name)
+{
+    ifstream file(file_name);
+    if (!file.is_open())
+    {
+        cout << "ERROR: File is not open!" << endl;
+        return;
+    }
+    string line;
+    Recipe recipe;
+    int flag = 0;
+    while (getline(file, line))
+    {
+        recipe = add_line_in_vector(line);
+        if (recipe_name == recipe.recipe[0])
+        {
+            flag=1;
+            for (int i = 2; i < recipe.m - 2; ++i)
+        {
+            if ("sugar" == recipe.recipe[i])
+            flag=2;
+        }
+            if(flag==2){
+                cout<<"you can't eat "<<recipe.recipe[0]<<" because of diabetes"<<endl;
+            }
+            else if(flag==1){
+                 cout<<"you can eat "<<recipe.recipe[0]<<endl;
+            }
+            break; // No need to continue searching after finding the recipe
+        }
+    }
+    if (flag == 0)
+    {
+        cout << "Recipe not found." << endl;
+    }
+    file.close();
+}
 void searchRecipe(const string &file_name, const string &recipe_name)
 {
     ifstream file(file_name);
@@ -257,7 +293,6 @@ void saveToCSV(string mealPlan[days][meals]) {
         cout << "Unable to open file." << endl;
     }
 }
-
 int main()
 {
     string file_name = "recipe_manager.csv";
@@ -281,7 +316,8 @@ int main()
         cout << "6. Add or Replace Meal Planner" << endl;
         cout << "7. Display Meal Planner"<<endl;
         cout << "8. Show all recipe and category"<<endl;
-        cout << "9. Exit"<<endl;
+        cout << "9. check recipe eatable for diabetes or not"<<endl;
+        cout << "10.Exit"<<endl;
         cout << "Enter your choice: ";
               if (!(cin >> choice)) {
             // Input extraction failed, meaning it's not an integer
@@ -342,7 +378,7 @@ int main()
             string recipeNameToDelete;
             cout << "Enter the recipe name to delete: ";
             cin >> recipeNameToDelete;
-            recipe_deleter("file_path.csv", recipeNameToDelete);
+            recipe_deleter("recipe_manager.csv", recipeNameToDelete);
             }
         }
         break;
@@ -416,11 +452,17 @@ int main()
         case 8:
         display_recipe_category(file_name);
         break;
+         case 9:
+              cout << "Enter recipe name to search: ";
+            getline(cin, recipe_name);
+            diabetes_eatable_checker(file_name, recipe_name);
+            break;
         default:
-            if(choice!=9){
+            if(choice!=10){
             cout << "Invalid choice. Please try again." << endl;
             }
         }
-    } while (choice != 9 );
+    } while (choice !=10 );
     return 0;
 }
+
