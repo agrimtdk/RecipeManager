@@ -226,7 +226,7 @@ void categorysearch(const string &file_name, const string &category_name)
 }
 void displayMP()
 {
-    ifstream file("Book.csv");
+    ifstream file("Meal_planner_file_path.csv");
     if (!file.is_open())
     {
         cout << "ERROR: Unable to open file!" << std::endl;
@@ -269,7 +269,7 @@ void displayMP()
 }
 
 void saveToCSV(string mealPlan[days][meals]) {
-    ofstream file("Book.csv");
+    ofstream file("Meal_Planner_file_path.csv");
     if (file.is_open()) {
         file << "Day,Meal\n";
 
@@ -295,7 +295,7 @@ void saveToCSV(string mealPlan[days][meals]) {
 }
 int main()
 {
-    string file_name = "recipe_manager.csv";
+    string file_name = "file_path.csv";
     string recipe_name;
     string ingredient_name;
     string category_name;
@@ -378,7 +378,7 @@ int main()
             string recipeNameToDelete;
             cout << "Enter the recipe name to delete: ";
             cin >> recipeNameToDelete;
-            recipe_deleter("recipe_manager.csv", recipeNameToDelete);
+            recipe_deleter("file_path.csv", recipeNameToDelete);
             }
         }
         break;
