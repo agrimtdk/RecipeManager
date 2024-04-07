@@ -1,8 +1,8 @@
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <sstream>
 #include <vector>
-#include <string>
 #include <limits> 
 
 using namespace std;
@@ -122,6 +122,43 @@ void ingredientsearch(const string &file_name, const string &ingredient_name)
         cout << "No recipe contain these ingredients." << endl;
     }
     file.close();
+}
+
+void recipe_adder(const string &rec_name, const string &rec_type, const string &rec_ings, const string &rec_steps, ofstream &tracker)
+{
+    tracker << rec_name << "," << rec_type << "," << rec_ings << ",directions," << rec_steps << endl;
+    tracker.seekp(-1, ios_base::cur);   //to move to the file pointer to starting of the file
+}
+
+void recipe_deleter(const string& filename, const string& recipe_name) {
+    ifstream infile(filename);
+    if (!infile) {
+        cerr << "Error: Unable to open file " << filename << endl;  //error  meassage
+        return;
+    }
+    //creating vector to hold strings
+    vector<string> lines;
+    string line;
+    
+    while (getline(infile, line)) {
+    if (line.find(recipe_name) == string::npos) {
+        lines.push_back(line);
+    }
+    else
+    cout << "Recipe has been deleted." << endl;
+    }
+
+    infile.close();
+    ofstream outfile(filename);
+    if (!outfile) {
+        cout << "Error: Unable to open file " << filename << " for writing." << endl;
+        return;
+    }
+    //writes the recipes to the file
+    for (const auto& l : lines) {
+        outfile << l << endl;
+    }
+    outfile.close();
 }
 
 void categorysearch(const string &file_name, const string &category_name)
@@ -273,27 +310,40 @@ int main()
             break;
         case 4:
         {
+            int freq;
+            cout << "Enter the number of times you have to add: ";
+            cin >> freq;
+            for(int i=1; i<=freq; i++)
+            {
             string rec_add_name, rec_add_type, rec_add_ing, rec_add_steps;
-            cout << "Enter the recipe you want to add (name, type, ingredients, steps):" << endl;
+            cout << "Enter the details of recipe you want to add:" << endl;
+            getchar();
             cout << "Enter the recipe name: ";
             getline(cin, rec_add_name);
             cout << "Enter the recipe type: ";
             getline(cin, rec_add_type);
-            cout << "Enter the recipe ingredients: ";
+            cout << "Enter the recipe ingredients: "; 
             getline(cin, rec_add_ing);
             cout << "Enter the recipe steps: ";
             getline(cin, rec_add_steps);
-            ofstream tempFile("recipe_manager.csv", ios::app);
+            getchar();
+            ofstream tempFile("file_path", ios::app);
             recipe_adder(rec_add_name, rec_add_type, rec_add_ing, rec_add_steps, tempFile);
             tempFile.close();
+            }
         }
         break;
         case 5:
-        {
+        {   int freq;
+            cout << "Enter the number of times you have to delete recipes: ";
+            cin >> freq;
+            for(int i=1; i<=freq; i++)
+            {
             string recipeNameToDelete;
             cout << "Enter the recipe name to delete: ";
-            getline(cin, recipeNameToDelete);
-            delete_recipe(file_name, recipeNameToDelete);
+            cin >> recipeNameToDelete;
+            recipe_deleter("file_path.csv", recipeNameToDelete);
+            }
         }
         break;
         case 6:
