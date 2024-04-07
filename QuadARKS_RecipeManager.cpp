@@ -1,93 +1,95 @@
 #include <iostream>
-#include <string>
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <string>
+#include <limits> 
 
 using namespace std;
-
-void recipe_adder(const string& a, const string& b, const string& c, const string&d, ofstream& tracker)
+const int days = 7;
+const int meals = 3;
+string daysOfWeek[days] = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+struct Recipe
 {
-    //to add the recipe details by usage of delimeter of ','
-    tracker << a << "," << b << "," << c << "," << d << endl;
+    vector<string> recipe;
+    int m = 0;
+};
+
+Recipe add_line_in_vector(const string &line)
+{
+    Recipe recipe;
+    stringstream get(line);
+    string temp;
+    while (getline(get, temp, ','))
+    {
+        if (temp != "directions")
+        {
+            recipe.m++; // Count the number of ingredients
+        }
+        else
+        {
+            // Stop parsing ingredients when "directions" is encountered
+        }
+        recipe.recipe.push_back(temp);
+    }
+    return recipe;
 }
 
-void delete_recipe(const string& filename, const string& recipeName) {
-    //to check if the filename provided is correct
-    ifstream infile(filename);
-    if (!infile) {
-        cerr << "Error: Unable to open file " << filename << endl;
+void searchRecipe(const string &file_name, const string &recipe_name)
+{
+    ifstream file(file_name);
+    if (!file.is_open())
+    {
+        cout << "ERROR: File is not open!" << endl;
         return;
     }
-    //creating vector to hold strings
-    vector<string> lines;
     string line;
-    while (getline(infile, line)) {
-        //check if the line contains the recipe name, npos means not found
-        if (line.find(recipeName) == string::npos) {
-            lines.push_back(line);
-        }
-        else{
-            cout << "\nRecipe not found!!!\n";
-        }
-    }
-    infile.close();
-    //to check if the file can be opened
-    ofstream outfile(filename);
-    if (!outfile) {
-        cout << "Error: Unable to open file " << filename << " for writing." << endl;
-        return;
-    }
-    //writes the recipes to the file
-    for (const auto& l : lines) {
-        outfile << l << endl;
-    }
-    outfile.close();
-}
-
-int main() 
-{
-    ifstream file("<file_path>.csv");
-    // Open the output file stream in append mode
-    ofstream tempFile("<file_path>.csv", ios::app);
-    string rec_name, rec_type, rec_ing, rec_steps;
-    char choice;
-    cout << "Enter 'a' to add a recipe: ";
-    choice = getchar();
-    if(choice == 'a' || choice == 'A')
+    Recipe recipe;
+    int flag = 0;
+    while (getline(file, line))
     {
-    //adding part of the recipe
-    string rec_add_name, rec_add_type, rec_add_ing, rec_add_steps;
-    cout << "Enter the recipe you want to add (name, type, ingredients): \n";
-    cout << "Enter the recipe name: ";
-    getchar();
-    getline(cin, rec_add_name, '\n');
-    cout << "Enter the recipe type: ";
-    getline(cin, rec_add_type, '\n');
-    cout << "Enter the recipe ingredients: ";
-    getline(cin, rec_add_ing, '\n');
-    cout << "Enter the recipe steps: ";
-    getline(cin, rec_add_steps, '\n');
-    recipe_adder(rec_add_name, rec_add_type, rec_add_ing, rec_add_steps, tempFile);
+        recipe = add_line_in_vector(line);
+        if (recipe_name == recipe.recipe[0])
+        {
+            flag = 1; // Recipe found
+            cout << "Recipe Name: " << recipe.recipe[0] << endl;
+            cout << "Category: " << recipe.recipe[1] << endl;
+            cout << "Ingredients:" << endl;
+            for (int i = 2; i < recipe.recipe.size(); ++i)
+            {
+                if (recipe.recipe[i] == "directions")
+                {
+                    cout << "Directions :" << endl;
+                }
+                else if (recipe.recipe[i] == "Directions :")
+                {
+                    continue;
+                }
+                else
+                    cout << "-"<<recipe.recipe[i] << endl;
+            }
 
+            break; // No need to continue searching after finding the recipe
+        }
     }
-    //deletion part of the recipe
-    cout << "Enter 'd' to delete a recipe: ";
-    cin >> choice;
-    if(choice == 'd' || choice == 'D')
+    if (flag == 0)
     {
-    string filename = "<file_path>.csv";
-    
-    string recipeNameToDelete;
-    cout << "Enter the name of the recipe you want to delete: ";
-    getchar();
-    getline(cin, recipeNameToDelete);
-
-    delete_recipe(filename, recipeNameToDelete);
+        cout << "Recipe not found." << endl;
     }
     file.close();
-    tempFile.close();
-    
-    return 0;
 }
+void display_recipe_category(const string &file_name) {
+    ifstream file(file_name);
+    if (!file.is_open()) {
+        cout << "ERROR: File is not open!" << endl;
+        return;
+    }
 
+    string line;
+    while (getline(file, line)) {
+        Recipe recipe = add_line_in_vector(line);
+        cout << "Recipe: " << recipe.recipe[0] << " - Category: " << recipe.recipe[1] << endl;
+    }
+    
+    file.close();
+}
