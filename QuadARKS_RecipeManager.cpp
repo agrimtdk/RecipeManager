@@ -93,6 +93,75 @@ void display_recipe_category(const string &file_name) {
     
     file.close();
 }
+void displayMP()
+{
+    std::ifstream file("Book.csv");
+    if (!file.is_open())
+    {
+        std::cout << "ERROR: Unable to open file!" << std::endl;
+        return;
+    }
+
+    std::string line;
+    getline(file, line); // Read and discard the header line
+
+    std::cout << "Meal Planner" << std::endl;
+    for (int i = 0; i < days; ++i)
+    {
+        std::cout << "Day " << i + 1 << " (" << daysOfWeek[i] << "):" << std::endl;
+        for (int j = 0; j < meals; ++j)
+        {
+            std::string meal;
+            if (getline(file, meal))
+            {
+                // Adjusting for the format of the CSV file
+                std::string mealType;
+                if (j == 0)
+                    mealType = "Breakfast";
+                else if (j == 1)
+                    mealType = "Lunch";
+                else
+                    mealType = "Dinner";
+
+                // Assuming the content of the CSV file matches the meal plan format
+                std::cout << "Enter " << mealType << " for " << daysOfWeek[i] << ": " << meal << std::endl;
+            }
+            else
+            {
+                std::cout << "Error reading meal from file." << std::endl;
+                break;
+            }
+        }
+        std::cout << std::endl;
+    }
+    file.close();
+}
+
+void saveToCSV(string mealPlan[days][meals]) {
+    ofstream file("Book.csv");
+    if (file.is_open()) {
+        file << "Day,Meal\n";
+
+        for (int i = 0; i < days; ++i) {
+            for (int j = 0; j < meals; ++j) {
+                string mealType;
+                if (j == 0)
+                    mealType = "Breakfast";
+                else if (j == 1)
+                    mealType = "Lunch";
+                else
+                    mealType = "Dinner";
+
+                file << mealPlan[i][j] << "\n";
+            }
+        }
+
+        file.close();
+        cout << "Meal plan saved" << endl;
+    } else {
+        cout << "Unable to open file." << endl;
+    }
+}
 int main()
 {
     string file_name = "recipe_manager.csv";
