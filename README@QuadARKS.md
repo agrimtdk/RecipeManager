@@ -5,6 +5,7 @@ This repository contains the program for the management of recipes
 
 <br>
 contributions
+<br>
 JAIN RUSHABHKUMAR SUNILKUMAR - 25%
 SHARMA AGRIM SARJU - 25%
 SHIVAM NARESHKUMAR PATEL - 25%
